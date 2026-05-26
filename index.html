@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="es">
+
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Agenda Estudiantil</title>
+
+
+<style>
+
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:linear-gradient(135deg,#4c1d95,#6d28d9,#7c3aed);
+    color:white;
+}
+
+
+/* NAV */
+
+
+nav{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    background:rgba(124,58,237,0.85);
+    padding:12px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    backdrop-filter:blur(10px);
+    flex-wrap:wrap;
+}
+
+
+nav button{
+    background:transparent;
+    border:none;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    padding:10px 14px;
+    border-radius:12px;
+    transition:0.25s;
+}
+
+
+nav button:hover{
+    background:rgba(255,255,255,0.15);
+    transform:translateY(-2px);
+}
+
+
+nav button.active{
+    background:rgba(255,255,255,0.25);
+}
+
+
+/* SECCIONES */
+
+
+section{
+    display:none;
+    padding:30px;
+}
+
+
+section.active{
+    display:block;
+    animation:fadeIn 0.4s ease;
+}
+
+
+/* NOTIFICACIONES */
+
+
+.notification{
+    position:fixed;
+    top:80px;
+    right:20px;
+    background:rgba(139,92,246,0.95);
+    color:white;
+    padding:15px 20px;
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.4);
+    z-index:1000;
+    max-width:300px;
+    animation:slideIn 0.3s ease;
+    backdrop-filter:blur(10px);
+    border:2px solid rgba(139,92,246,0.8);
+}
+
+
+.notification.success{
+    background:rgba(22,163,74,0.95);
+    border-color:rgba(22,163,74,0.8);
+}
+
+
+.notification.warning{
+    background:rgba(234,179,8,0.95);
+    border-color:rgba(234,179,8,0.8);
+}
+
+
+.notification.info{
+    background:rgba(59,130,246,0.95);
+    border-color:rgba(59,130,246,0.8);
+}
+
+
+@keyframes slideIn{
+from{
+    transform:translateX(350px);
+    opacity:0;
+}
+to{
+    transform:translateX(0);
+    opacity:1;
+}
+}
+
+
+@keyframes slideOut{
+from{
+    transform:translateX(0);
+    opacity:1;
+}
+to{
+    transform:translateX(350px);
+    opacity:0;
+}
+}
+
+
+/* HOME */
+
+
+.hero{
+    min-height:70vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+
+.hero-card{
+    width:90%;
+    max-width:900px;
+    background:rgba(255,255,255,0.08);
+    border-radius:30px;
+    padding:40px;
+    text-align:center;
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,0.1);
+    box-shadow:0 10px 30px rgba(0,0,0,0.35);
+    transition:0.25s;
+}
+
+
+.hero-card:hover{
+    transform:translateY(-2px);
+}
+
+
+.hero-card h1{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+
+.hero-card p{
+    opacity:0.9;
+    font-size:18px;
+}
+
+
+.proyecto-badge{
+    display:inline-block;
+    background:rgba(139,92,246,0.6);
+    padding:8px 20px;
+    border-radius:25px;
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:15px;
+    border:2px solid rgba(139,92,246,0.8);
+}
+
+
+.home-box{
+    background:rgba(255,255,255,0.08);
+    margin-top:20px;
+    padding:20px;
+    border-radius:20px;
+}
+
+
+/* CARD */
+
+
+.card{
+    background:rgba(255,255,255,0.08);
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0px 10px 30px rgba(0,0,0,0.3);
+    margin:auto;
+    width:85%;
+    margin-bottom:25px;
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.1);
+    transition:0.25s;
+}
+
+
+.card:hover{
+    transform:translateY(-2px);
+}
+
+
+h2{
+    color:#c4b5fd;
+}
+
+
+input,select,textarea{
+    padding:10px;
+    border-radius:10px;
+    border:none;
+    margin:5px;
+    font-size:14px;
+    outline:none;
+}
+
+
+textarea{
+    width:90%;
+    height:100px;
+}
+
+
+button{
+    background:#8b5cf6;
+    color:white;
+    border:none;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+    margin:5px;
+    transition:0.25s;
+}
+
+
+button:hover{
+    background:#7c3aed;
+    transform:scale(1.03);
+}
+
+
+li{
+    background:rgba(255,255,255,0.1);
+    padding:10px;
+    margin-top:10px;
+    border-radius:10px;
+    list-style:none;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    transition:0.25s;
+}
+
+
+li:hover{
+    transform:translateX(3px);
+}
+
+
+small{
+    opacity:0.7;
+}
+
+
+/* CALENDARIO */
+
+
+.calendar{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:5px;
+    margin-top:10px;
+}
+
+
+.day{
+    background:rgba(255,255,255,0.08);
+    padding:10px;
+    border-radius:8px;
+    text-align:center;
+    font-size:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+
+.day:hover{
+    transform:scale(1.05);
+}
+
+
+.marked{
+    background:#8b5cf6;
+}
+
+
+/* QUIZ */
+
+
+.quiz-box{
+    margin-top:20px;
+}
+
+
+.answer-btn{
+    display:block;
+    width:100%;
+    margin-top:10px;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:rgba(255,255,255,0.08);
+    color:white;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+
+.answer-btn:hover{
+    background:#8b5cf6;
+}
+
+
+.correct{
+    background:#16a34a !important;
+}
+
+
+.wrong{
+    background:#dc2626 !important;
+}
+
+
+/* FINANZAS */
+
+
+#balance b {
+    font-size: 16px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+
+#balance b:last-child {
+    color: #16a34a;
+}
+
+
+/* ANIMACIONES */
+
+
+@keyframes fadeIn{
+from{
+    opacity:0;
+    transform:translateY(10px);
+}
+to{
+    opacity:1;
+    transform:translateY(0px);
+}
+}
+
+
+/* MOBILE */
+
+
+@media(max-width:700px){
+    .card{
+        width:92%;
+        padding:18px;
+    }
+    .hero-card{
+        padding:25px;
+    }
+    .hero-card h1{
+        font-size:32px;
+    }
+    .proyecto-badge{
+        font-size:16px;
+        padding:6px 16px;
+    }
+    .notification{
+        top:70px;
+        right:10px;
+        left:10px;
+        max-width:none;
+    }
+    nav{
+        gap:8px;
+    }
+    nav button{
+        font-size:14px;
+        padding:8px 10px;
+    }
+}
+
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- NAV -->
+
+
+<nav>
+
+
+<button class="active" onclick="showSection('home',this)">
+🏠 Inicio
+</button>
+
+
+<button onclick="showSection('tareas',this)">
+📖 Tareas
+</button>
+
+
+<button onclick="showSection('calendario',this)">
+📅 Calendario
+</button>
+
+
+<button onclick="showSection('notas',this)">
+📌 Notas
+</button>
+
+
+<button onclick="showSection('aprender',this)">
+💡 Aprender
+</button>
+
+
+<button onclick="showSection('finanzas',this)">
+💵 Finanzas
+</button>
+
+
+</nav>
+
+
+<!-- HOME -->
+
+
+<section id="home" class="active">
+
+
+<div class="hero">
+
+
+<div class="hero-card">
+
+
+<div class="proyecto-badge">
+🎓 Escuela de la Vida
+</div>
+
+
+<h1>✨ ¡Hola, estudiante!</h1>
+
+
+<p>
+Tu espacio académico y personal.
+Organiza tareas, notas y aprende algo nuevo cada día.
+</p>
+
+
+<div class="home-box">
+
+
+<h2>📋 Tareas de hoy</h2>
+
+
+<div id="tareasHoy">
+Cargando...
+</div>
+
+
+</div>
+
+
+<div class="home-box">
+
+
+<h2>🧪 Dato del día</h2>
+
+
+<div id="datoHome">
+Cargando...
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+<!-- TAREAS -->
+
+
+<section id="tareas">
+
+
+<div class="card">
+
+
+<h2>📚 Tareas</h2>
+
+
+<input id="texto" placeholder="Tarea (ej. 'Resolver Pág. 45')">
+
+
+<select id="categoria"></select>
+
+
+<input type="date" id="fecha">
+
+
+<button onclick="agregarTarea()">
+➕ Agregar tarea
+</button>
+
+
+<br><br>
+
+
+<input id="nuevaCategoria" placeholder="Nueva categoría">
+
+
+<button onclick="agregarCategoria()">
+🏷️ Agregar categoría
+</button>
+
+
+<h3>Filtrar</h3>
+
+
+<select id="categoriaFiltro" onchange="render()"></select>
+
+
+<ul id="lista"></ul>
+
+
+</div>
+
+
+</section>
+
+
+<!-- CALENDARIO -->
+
+
+<section id="calendario">
+
+
+<div class="card">
+
+
+<h2>🗓️ Calendario</h2>
+
+
+<div style="display:flex;justify-content:space-between;align-items:center;">
+
+
+<button onclick="cambiarMes(-1)">⬅</button>
+
+
+<h3 id="mesTitulo"></h3>
+
+
+<button onclick="cambiarMes(1)">➡</button>
+
+
+</div>
+
+
+<div id="calendar" class="calendar"></div>
+
+
+<div id="diaInfo" style="margin-top:15px;"></div>
+
+
+</div>
+
+
+</section>
+
+
+<!-- NOTAS -->
+
+
+<section id="notas">
+
+
+<div class="card">
+
+
+<h2>📝 Notas</h2>
+
+
+<input id="tituloNota" placeholder="Título (ej. 'Biología - Células')">
+
+
+<textarea id="contenidoNota" placeholder="Escribe aquí..."></textarea>
+
+
+<button onclick="agregarNota()">
+💾 Guardar nota
+</button>
+
+
+<ul id="listaNotas"></ul>
+
+
+</div>
+
+
+</section>
+
+
+<!-- APRENDER -->
+
+
+<section id="aprender">
+
+
+<div class="card">
+
+
+<h2>🎓 Aprender</h2>
+
+
+<p>
+Pon a prueba tus conocimientos con preguntas aleatorias.
+</p>
+
+
+<select id="categoriaQuiz">
+
+
+<option value="9">🌍 Cultura general</option>
+<option value="17">🧬 Ciencia</option>
+<option value="19">🔢 Matemáticas</option>
+<option value="23">📜 Historia</option>
+
+
+</select>
+
+
+<button onclick="cargarPregunta()">
+🎮 Nueva pregunta
+</button>
+
+
+<div class="quiz-box">
+
+
+<h3 id="pregunta">
+Presiona "Nueva pregunta"
+</h3>
+
+
+<div id="respuestas"></div>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+<!-- FINANZAS -->
+
+
+<section id="finanzas">
+
+
+<div class="card">
+
+
+<h2>💰 Finanzas personales</h2>
+
+
+<input id="concepto" placeholder="Concepto (ej. 'pasaje autobús')">
+<input id="monto" type="number" placeholder="Monto">
+<select id="tipo">
+    <option value="ingreso">🟢 Ingreso</option>
+    <option value="gasto">🔴 Gasto</option>
+</select>
+<button onclick="agregarMovimiento()">
+➕ Añadir movimiento
+</button>
+
+
+<h3>Balance</h3>
+<div id="balance">
+Cargando...
+</div>
+
+
+<ul id="listaMovimientos"></ul>
+
+
+</div>
+
+
+</section>
+
+
+<!-- SONIDOS -->
+
+
+<audio id="successSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
+<audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+<audio id="errorSound" src="https://assets.mixkit.co/active_storage/sfx/2955/2955-preview.mp3"></audio>
+<audio id="deleteSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+
+
+<script>
+
+
+/* DATOS */
+
+
+let tareas =
+JSON.parse(localStorage.getItem("tareas")) || [];
+
+
+let categorias =
+JSON.parse(localStorage.getItem("categorias")) ||
+["escuela","personal"];
+
+
+let notas =
+JSON.parse(localStorage.getItem("notas")) || [];
+
+
+let movimientos =
+JSON.parse(localStorage.getItem("movimientos")) || [];
+
+
+let mesActual = new Date().getMonth();
+let añoActual = new Date().getFullYear();
+
+
+/* SONIDOS */
+
+
+function playSuccess(){
+    document.getElementById("successSound").play();
+}
+
+
+function playClick(){
+    document.getElementById("clickSound").play();
+}
+
+
+function playError(){
+    document.getElementById("errorSound").play();
+}
+
+
+function playDelete(){
+    document.getElementById("deleteSound").play();
+}
+
+
+/* NOTIFICACIONES */
+
+
+function mostrarNotificacion(mensaje, tipo="info"){
+    let notif = document.createElement("div");
+    notif.className = `notification ${tipo}`;
+    notif.innerHTML = mensaje;
+    document.body.appendChild(notif);
+    
+    setTimeout(()=>{
+        notif.style.animation = "slideOut 0.3s ease";
+        setTimeout(()=>{
+            notif.remove();
+        }, 300);
+    }, 4000);
+}
+
+
+function pedirPermitirNotificaciones(){
+    if("Notification" in window && Notification.permission === "default"){
+        Notification.requestPermission();
+    }
+}
+
+
+function enviarNotificacionPush(titulo, mensaje){
+    if("Notification" in window && Notification.permission === "granted"){
+        new Notification(titulo, {
+            body: mensaje,
+            icon: "🎓",
+            badge: "🎓"
+        });
+    }
+}
+
+
+/* NAV */
+
+
+function showSection(id,btn){
+
+
+    playClick();
+
+
+    document.querySelectorAll("section").forEach(s=>{
+        s.classList.remove("active");
+    });
+
+
+    document.getElementById(id)
+    .classList.add("active");
+
+
+    document.querySelectorAll("nav button")
+    .forEach(b=>{
+        b.classList.remove("active");
+    });
+
+
+    btn.classList.add("active");
+}
+
+
+/* SAVE */
+
+
+function save(){
+
+
+    localStorage.setItem(
+    "tareas",
+    JSON.stringify(tareas)
+    );
+
+
+    localStorage.setItem(
+    "categorias",
+    JSON.stringify(categorias)
+    );
+
+
+    localStorage.setItem(
+    "notas",
+    JSON.stringify(notas)
+    );
+
+
+}
+
+
+function saveFinanzas(){
+    localStorage.setItem("movimientos", JSON.stringify(movimientos));
+}
+
+
+/* HOME */
+
+
+function renderTareasHoy(){
+
+
+    let hoy =
+    new Date().toISOString().split("T")[0];
+
+
+    let tareasHoyLista =
+    tareas.filter(t=>t.fecha===hoy);
+
+
+    let div =
+    document.getElementById("tareasHoy");
+
+
+    if(tareasHoyLista.length===0){
+        div.innerHTML =
+        "No tienes tareas para hoy 🎉";
+        return;
+    }
+
+
+    let html = tareasHoyLista.map(t=>`
+    • ${t.texto} (${t.categoria})
+    `).join("<br>");
+    
+    div.innerHTML = html;
+    
+    if(tareasHoyLista.length > 0){
+        mostrarNotificacion(
+            `📚 Tienes <b>${tareasHoyLista.length} tarea${tareasHoyLista.length>1?'s':''}</b> para hoy: ${tareasHoyLista[0].texto}`,
+            "warning"
+        );
+        enviarNotificacionPush(
+            "Tienes tareas para hoy",
+            `Tienes ${tareasHoyLista.length} tarea(s): ${tareasHoyLista[0].texto}`
+        );
+    }
+}
+
+
+/* CATEGORÍAS */
+
+
+function loadCategorias(){
+
+
+    let select =
+    document.getElementById("categoria");
+
+
+    let filtro =
+    document.getElementById("categoriaFiltro");
+
+
+    select.innerHTML = "";
+    filtro.innerHTML = "";
+
+
+    let all =
+    document.createElement("option");
+
+
+    all.value = "todas";
+    all.textContent = "Todas";
+
+
+    filtro.appendChild(all);
+
+
+    categorias.forEach(c=>{
+
+
+        let op1 =
+        document.createElement("option");
+
+
+        op1.value = c;
+        op1.textContent = c;
+
+
+        select.appendChild(op1);
+
+
+        let op2 =
+        document.createElement("option");
+
+
+        op2.value = c;
+        op2.textContent = c;
+
+
+        filtro.appendChild(op2);
+
+
+    });
+
+
+}
+
+
+/* AGREGAR CATEGORÍA */
+
+
+function agregarCategoria(){
+
+
+    let input =
+    document.getElementById("nuevaCategoria");
+
+
+    if(!input.value) return;
+
+
+    categorias.push(input.value);
+
+
+    input.value = "";
+
+
+    playSuccess();
+    save();
+    loadCategorias();
+    mostrarNotificacion("✅ Categoría agregada exitosamente", "success");
+}
+
+
+/* TAREAS */
+
+
+function agregarTarea(){
+
+
+    let texto =
+    document.getElementById("texto").value;
+
+
+    let categoria =
+    document.getElementById("categoria").value;
+
+
+    let fecha =
+    document.getElementById("fecha").value;
+
+
+    if(!texto || !fecha){
+        alert("Escribe tarea y fecha");
+        return;
+    }
+
+
+    tareas.push({
+        texto,
+        categoria,
+        fecha,
+        done:false
+    });
+
+
+    playSuccess();
+    save();
+    render();
+    renderTareasHoy();
+    
+    let fechaHermosa = new Date(fecha).toLocaleDateString("es-MX", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    });
+    
+    mostrarNotificacion(
+        `✅ Tarea agregada: <b>${texto}</b> <br><small>📅 ${fechaHermosa}</small>`,
+        "success"
+    );
+    
+    let hoy = new Date().toISOString().split("T")[0];
+    if(fecha === hoy){
+        enviarNotificacionPush("Tarea agregada para hoy", texto);
+    }
+}
+
+
+function eliminar(i){
+    playDelete();
+    tareas.splice(i,1);
+    save();
+    render();
+    renderTareasHoy();
+    mostrarNotificacion("🗑️ Tarea eliminada", "info");
+}
+
+
+function toggle(i){
+    playSuccess();
+    tareas[i].done =
+    !tareas[i].done;
+    save();
+    render();
+    
+    if(tareas[i].done){
+        mostrarNotificacion(
+            `✅ ¡Bien hecho! Completaste: <b>${tareas[i].texto}</b>`,
+            "success"
+        );
+    }
+}
+
+
+/* RENDER */
+
+
+function render(){
+
+
+    let lista =
+    document.getElementById("lista");
+
+
+    lista.innerHTML = "";
+
+
+    let filtro =
+    document.getElementById("categoriaFiltro").value;
+
+
+    let tareasFiltradas =
+    tareas.filter(t=>{
+        return filtro==="todas" ||
+        t.categoria===filtro;
+    });
+
+
+    tareasFiltradas.forEach(t=>{
+        let i = tareas.indexOf(t);
+        let li =
+        document.createElement("li");
+
+
+        li.innerHTML = `
+        <div>
+            <b style="${
+                t.done ?
+                'text-decoration:line-through;opacity:0.6;'
+                :
+                ''
+            }">
+                ${t.texto}
+            </b>
+            <br>
+            <small>${t.categoria} | ${t.fecha}</small>
+        </div>
+        <div>
+            <button onclick="toggle(${i})">
+                ✅
+            </button>
+            <button onclick="eliminar(${i})">
+                🗑️
+            </button>
+        </div>
+        `;
+
+
+        lista.appendChild(li);
+    });
+
+
+    renderCalendar();
+}
+
+
+/* CALENDARIO */
+
+
+function cambiarMes(valor){
+    mesActual += valor;
+    if(mesActual<0){
+        mesActual=11;
+        añoActual--;
+    }
+    if(mesActual>11){
+        mesActual=0;
+        añoActual++;
+    }
+    renderCalendar();
+}
+
+
+function renderCalendar(){
+
+
+    let cal =
+    document.getElementById("calendar");
+
+
+    let titulo =
+    document.getElementById("mesTitulo");
+
+
+    cal.innerHTML = "";
+
+
+    let meses = [
+    "Enero","Febrero","Marzo",
+    "Abril","Mayo","Junio",
+    "Julio","Agosto","Septiembre",
+    "Octubre","Noviembre","Diciembre"
+    ];
+
+
+    titulo.textContent =
+    `${meses[mesActual]} ${añoActual}`;
+
+
+    let firstDay =
+    new Date(añoActual,mesActual,1).getDay();
+
+
+    let daysInMonth =
+    new Date(añoActual,mesActual+1,0).getDate();
+
+
+    for(let i=0;i<firstDay;i++){
+        cal.appendChild(document.createElement("div"));
+    }
+
+
+    for(let d=1; d<=daysInMonth; d++){
+        let dateStr =
+        `${añoActual}-${String(mesActual+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+
+
+        let tareasDelDia =
+        tareas.filter(t=>t.fecha===dateStr);
+
+
+        let div =
+        document.createElement("div");
+
+
+        div.className = "day";
+
+
+        if(tareasDelDia.length>0){
+            div.classList.add("marked");
+        }
+
+
+        div.textContent = d;
+        div.onclick = ()=>mostrarDia(dateStr,tareasDelDia);
+        cal.appendChild(div);
+    }
+}
+
+
+function mostrarDia(fecha,tareasDelDia){
+
+
+    let info =
+    document.getElementById("diaInfo");
+
+
+    if(tareasDelDia.length===0){
+        info.innerHTML =
+        `📅 <b>${fecha}</b><br>No tienes tareas`;
+        return;
+    }
+
+
+    info.innerHTML = `
+    📅 <b>${fecha}</b><br><br>
+    ${tareasDelDia.map(t=>
+        `• ${t.texto} (${t.categoria})`
+    ).join("<br>")}
+    `;
+}
+
+
+/* NOTAS */
+
+
+function agregarNota(){
+
+
+    let titulo =
+    document.getElementById("tituloNota").value;
+
+
+    let contenido =
+    document.getElementById("contenidoNota").value;
+
+
+    if(!titulo && !contenido){
+        alert("Escribe algo");
+        return;
+    }
+
+
+    notas.push({
+        titulo,
+        contenido
+    });
+
+
+    playSuccess();
+
+
+    document.getElementById("tituloNota").value="";
+    document.getElementById("contenidoNota").value="";
+
+
+    save();
+    renderNotas();
+    mostrarNotificacion(
+        `💾 Nota guardada: <b>${titulo || "Sin título"}</b>`,
+        "success"
+    );
+}
+
+
+function renderNotas(){
+
+
+    let lista =
+    document.getElementById("listaNotas");
+
+
+    lista.innerHTML = "";
+
+
+    notas.forEach((n,i)=>{
+        let li =
+        document.createElement("li");
+
+
+        li.innerHTML = `
+        <div>
+            <b>${n.titulo}</b><br>
+            <small>${n.contenido}</small>
+        </div>
+        <div>
+            <button onclick="editarNota(${i})">
+                ✏️
+            </button>
+            <button onclick="eliminarNota(${i})">
+                🗑️
+            </button>
+        </div>
+        `;
+
+
+        lista.appendChild(li);
+    });
+}
+
+
+function editarNota(i){
+    let nuevaNota =
+    prompt("Edita la nota:", notas[i].contenido);
+
+
+    if(nuevaNota===null) return;
+
+
+    let nuevoTitulo =
+    prompt("Edita el título:", notas[i].titulo);
+
+
+    if(nuevoTitulo===null) return;
+
+
+    notas[i].contenido = nuevaNota;
+    notas[i].titulo = nuevoTitulo;
+
+
+    playSuccess();
+    save();
+    renderNotas();
+    mostrarNotificacion("✏️ Nota actualizada", "success");
+}
+
+
+function eliminarNota(i){
+    playDelete();
+    notas.splice(i,1);
+    save();
+    renderNotas();
+    mostrarNotificacion("🗑️ Nota eliminada", "info");
+}
+
+
+/* FINANZAS */
+
+
+function agregarMovimiento(){
+
+
+    let concepto = document.getElementById("concepto").value;
+    let monto    = parseFloat(document.getElementById("monto").value);
+    let tipo     = document.getElementById("tipo").value;
+
+
+    if(!concepto || isNaN(monto) || monto <= 0){
+        playError();
+        alert("Introduce concepto y monto válido");
+        return;
+    }
+
+
+    movimientos.push({
+        concepto,
+        monto,
+        tipo,
+        fecha: new Date().toISOString().split("T")[0]
+    });
+
+
+    playSuccess();
+    saveFinanzas();
+    renderMovimientos();
+    renderBalance();
+    
+    let icon = tipo === "ingreso" ? "🟢" : "🔴";
+    mostrarNotificacion(
+        `${icon} Movimiento agregado: <b>${concepto}</b> <br><small>$${monto.toFixed(2)}</small>`,
+        tipo === "ingreso" ? "success" : "warning"
+    );
+}
+
+
+function renderBalance(){
+    let totalIngresos = movimientos
+        .filter(m => m.tipo === "ingreso")
+        .reduce((sum, m) => sum + m.monto, 0);
+
+
+    let totalGastos = movimientos
+        .filter(m => m.tipo === "gasto")
+        .reduce((sum, m) => sum + m.monto, 0);
+
+
+    let ahorro = totalIngresos - totalGastos;
+
+
+    let balanceEl = document.getElementById("balance");
+
+
+    balanceEl.innerHTML = `
+        <b>💰 Ingresos:</b> $${totalIngresos.toFixed(2)}<br>
+        <b>💸 Gastos:</b> $${totalGastos.toFixed(2)}<br>
+        <b>📈 Ahorro:</b> $${ahorro.toFixed(2)}
+    `;
+}
+
+
+function renderMovimientos(){
+    let lista = document.getElementById("listaMovimientos");
+    lista.innerHTML = "";
+
+
+    movimientos.forEach((m, i) => {
+        let color = m.tipo === "ingreso" ? "green" : "red";
+        let icon  = m.tipo === "ingreso" ? "🟢" : "🔴";
+
+
+        let li = document.createElement("li");
+        li.innerHTML = `
+            <div>
+                <b style="color:${color}">${icon} ${m.concepto}</b><br>
+                <small>$${m.monto.toFixed(2)} • ${m.fecha}</small>
+            </div>
+            <div>
+                <button onclick="editarMovimiento(${i})">
+                    ✏️
+                </button>
+                <button onclick="eliminarMovimiento(${i})">
+                    🗑️
+                </button>
+            </div>
+        `;
+        lista.appendChild(li);
+    });
+}
+
+
+function editarMovimiento(i){
+    let m = movimientos[i];
+
+
+    let concepto = prompt("Concepto:", m.concepto);
+    if(concepto === null) return;
+
+
+    let monto = prompt("Monto:", m.monto);
+    if(monto === null || isNaN(parseFloat(monto)) || parseFloat(monto) <= 0){
+        playError();
+        alert("Monto inválido");
+        return;
+    }
+
+
+    movimientos[i] = {
+        ...m,
+        concepto,
+        monto: parseFloat(monto)
+    };
+
+
+    playSuccess();
+    saveFinanzas();
+    renderMovimientos();
+    renderBalance();
+    mostrarNotificacion("✏️ Movimiento actualizado", "success");
+}
+
+
+function eliminarMovimiento(i){
+    playDelete();
+    movimientos.splice(i, 1);
+    saveFinanzas();
+    renderMovimientos();
+    renderBalance();
+    mostrarNotificacion("🗑️ Movimiento eliminado", "info");
+}
+
+
+/* TRADUCCIÓN */
+
+
+async function traducirTexto(texto){
+    try{
+        let res = await fetch(
+        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(texto)}&langpair=en|es`
+        );
+        let data = await res.json();
+        return data.responseData.translatedText;
+    }catch{
+        return texto;
+    }
+}
+
+
+/* DATO DEL DÍA */
+
+
+async function mostrarDato(){
+    let datos = [
+        "El corazón humano late más de 100 mil veces al día 💓",
+        "La luz del Sol tarda 8 minutos en llegar a la Tierra ☀️",
+        "Los pulpos tienen tres corazones 🐙",
+        "La fotosíntesis permite a las plantas crear energía 🌱",
+        "Saturno podría flotar en agua por su baja densidad 🪐",
+        "El cuerpo humano tiene 206 huesos 🦴",
+        "La Gran Muralla China mide más de 21 mil kilómetros 🇨🇳",
+        "Las neuronas transmiten información mediante impulsos eléctricos ⚡"
+    ];
+    let random = datos[Math.floor(Math.random()*datos.length)];
+    document.getElementById("datoHome").innerHTML = random;
+}
+
+
+/* APRENDER */
+
+
+async function cargarPregunta(){
+    pregunta.innerHTML = "Cargando...";
+    respuestas.innerHTML = "";
+
+
+    let categoria =
+    document.getElementById("categoriaQuiz").value;
+
+
+    try{
+        let res =
+        await fetch(
+        `https://opentdb.com/api.php?amount=1&category=${categoria}&type=multiple`
+        );
+        let data =
+        await res.json();
+
+
+        let q =
+        data.results[0];
+
+
+        let textoPregunta =
+        await traducirTexto(q.question);
+
+
+        let correcta =
+        await traducirTexto(q.correct_answer);
+
+
+        let incorrectas =
+        await Promise.all(
+            q.incorrect_answers.map(a=>
+                traducirTexto(a)
+            )
+        );
+
+
+        let opciones =
+        [...incorrectas,correcta]
+        .sort(()=>Math.random()-0.5);
+
+
+        pregunta.innerHTML = textoPregunta;
+
+
+        opciones.forEach(op=>{
+            let btn =
+            document.createElement("button");
+
+
+            btn.className =
+            "answer-btn";
+
+
+            btn.innerHTML = op;
+
+
+            btn.onclick = ()=>{
+                document
+                .querySelectorAll(".answer-btn")
+                .forEach(b=>b.disabled=true);
+
+
+                if(op===correcta){
+                    playSuccess();
+                    btn.classList.add("correct");
+                    mostrarNotificacion("✅ ¡Correcto! 🎉", "success");
+                }else{
+                    playError();
+                    btn.classList.add("wrong");
+                    mostrarNotificacion("❌ Incorrecto, pero sigue intentando 💪", "warning");
+
+
+                    document
+                    .querySelectorAll(".answer-btn")
+                    .forEach(b=>{
+                        if(b.innerHTML===correcta){
+                            b.classList.add("correct");
+                        }
+                    });
+                }
+            };
+
+
+            respuestas.appendChild(btn);
+        });
+    }catch{
+        pregunta.innerHTML =
+        "❌ Error al cargar pregunta";
+        mostrarNotificacion("❌ Error al cargar la pregunta", "warning");
+    }
+}
+
+
+/* INIT */
+
+
+loadCategorias();
+render();
+renderNotas();
+renderTareasHoy();
+mostrarDato();
+renderMovimientos();
+renderBalance();
+
+
+/* Notificaciones al iniciar */
+
+
+pedirPermitirNotificaciones();
+
+
+setTimeout(()=>{
+    mostrarNotificacion(
+        "🎓 <b>¡Bienvenido a Escuela de la Vida!</b><br><small>Organiza tus tareas y aprende cada día</small>",
+        "info"
+    );
+}, 1000);
+
+
+let ultimoCheck = new Date().toDateString();
+
+
+setInterval(()=>{
+    let hoy = new Date().toDateString();
+    if(hoy !== ultimoCheck){
+        ultimoCheck = hoy;
+        renderTareasHoy();
+        mostrarNotificacion(
+            "☀️ <b>Nuevo día, nuevas oportunidades</b><br><small>Revisa tus tareas de hoy</small>",
+            "info"
+        );
+    }
+}, 60000);
+
+
+</script>
+
+
+</body>
+</html>
